@@ -178,3 +178,43 @@ void save_data() {
         outfile.close();
     }
 }
+
+// Melakukan Pendaftaran
+void user_registration() {
+    system("CLS");
+    char uname[50], pwd[50];
+    cout << "\n\t\t\t\tMasukkan Nama Pengguna: ";
+    cin >> uname;
+    cout << "\n\t\t\t\tMasukkan Password: ";
+    cin >> pwd;
+
+    if (registered_users.find(uname) == registered_users.end()) {
+        User newUser(uname, pwd);
+        registered_users[uname] = newUser;
+        cout << GREEN << "\n\t\t\t\tAnda Berhasil Mendaftar!" << RESET;
+    } else {
+        cout << RED << "\n\t\t\t\tNama Pengguna Sudah Ada!" << RESET;
+    }
+}
+
+// Melakukan Login
+bool user_login(string& username) {
+    system("CLS");
+    char uname[50], pwd[50];
+    cout << "\n\t\t\t\tMasukkan Nama Pengguna: ";
+    cin >> uname;
+    cout << "\n\t\t\t\tMasukkan Password: ";
+    cin >> pwd;
+
+    if (registered_users.find(uname) != registered_users.end() && strcmp(registered_users[uname].getPassword(), pwd) == 0) {
+        username = uname;
+
+        // Menambahkan waktu login terakhir
+        time_t now = time(0);
+        char* dt = ctime(&now);
+        registered_users[uname].addRecentLogin(string(dt));
+        
+        return true;
+    }
+    return false;
+}
