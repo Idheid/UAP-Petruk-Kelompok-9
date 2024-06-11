@@ -218,3 +218,138 @@ bool user_login(string& username) {
     }
     return false;
 }
+
+// Layanan Tersedia
+void display_menu(const string& username) {
+    char ch;
+    do {
+        system("CLS");
+        cout << "\n\n\t\t\t\t-------------------------------\n";
+        cout << "\t\t\t\t     BANK MANAJEMEN SISTEM";
+        cout << "\n\t\t\t\t-------------------------------\n";
+        cout << "\t\t\t\t  ::Layanan yang Tersedia::\n";
+        cout << "\n\t\t\t\t1. Isi Saldo";
+        cout << "\n\t\t\t\t2. Penarikan";
+        cout << "\n\t\t\t\t3. Tampilkan Saldo";
+        cout << "\n\t\t\t\t4. Tampilkan Riwayat Transaksi";
+        cout << "\n\t\t\t\t5. Tampilkan Riwayat Login Terbaru";
+        cout << "\n\t\t\t\t6. Transfer";
+        cout << "\n\t\t\t\t7. Logout";
+        cout << "\n\n\t\t\t\tPilih Opsi (1-7): ";
+        cin >> ch;
+
+        switch (ch) {
+            case '1':
+                deposit(username);
+                break;
+            case '2':
+                withdraw(username);
+                break;
+            case '3':
+                view_balance(username);
+                break;
+            case '4':
+                view_transaction_history(username);
+                break;
+            case '5':
+                view_recent_logins(username);
+                break;
+            case '6':
+                transfer(username);
+                break;
+            case '7':
+                system("CLS");
+                cout << "\n\n\t\t\t\tKembali ke Menu Utama.";
+                break;
+            default:
+                cout << "\a";
+        }
+        cin.ignore();
+        cin.get();
+    } while (ch != '7');
+}
+
+// Isi Saldo
+void deposit(const string& username) {
+    system("CLS");
+    int amount;
+    cout << "\n\t\t\t\tMasukkan Jumlah Pengisian Saldo: ";
+    cin >> amount;
+    registered_users[username].deposit(amount);
+    cout << GREEN << "\n\t\t\t\tPengisian Saldo Berhasil!" << RESET;
+}
+
+// Penarikan 
+void withdraw(const string& username) {
+    char cont;
+    do {
+        system("CLS");
+        int amount;
+        char pwd[50];
+        cout << "\n\t\t\t\tMasukkan Jumlah Penarikan: ";
+        cin >> amount;
+
+        if (amount <= registered_users[username].getBalance()) {
+            cout << "\n\t\t\t\tMasukkan Password untuk Konfirmasi: ";
+            cin >> pwd;
+            if (strcmp(registered_users[username].getPassword(), pwd) == 0) {
+                registered_users[username].withdraw(amount);
+                cout << GREEN << "\n\t\t\t\tPenarikan Berhasil!" << RESET;
+                
+                // Konfirmasi untuk transaksi lagi
+                cout << "\n\n\t\t\t\tApakah Anda ingin melakukan transaksi lagi? (y/n): ";
+                cin >> cont;
+                if (cont == 'n') {
+                    cont = 'n';
+                }
+            } else {
+                cout << RED << "\n\t\t\t\tPassword Salah!" << RESET;
+                cout <<"\n\t\t\t\tCoba Lagi? (y/n): ";
+                cin >> cont;
+            }
+        } else {
+            cout << RED << "\n\t\t\t\tSaldo Tidak Cukup!" << RESET;
+            cout <<"\n\t\t\t\tCoba Lagi? (y/n): ";
+            cin >> cont;
+        }
+    } while (cont != 'n');
+}
+
+// Melihat Jumlah Saldo
+void view_balance(const string& username) {
+    system("CLS");
+    cout << "\n\t\t\t\tSaldo Anda: " << registered_users[username].getBalance();
+}
+
+// Fungsi Merge Sort
+void merge(vector<string>& arr, int l, int m, int r) {
+    int n1 = m - l + 1;
+    int n2 = r - m;
+    vector<string> L(n1), R(n2);
+    for (int i = 0; i < n1; ++i)
+        L[i] = arr[l + i];
+    for (int j = 0; j < n2; ++j)
+        R[j] = arr[m + 1 + j];
+
+    int i = 0, j = 0, k = l;
+    while (i < n1 && j < n2) {
+        if (L[i] <= R[j]) {
+            arr[k] = L[i];
+            ++i;
+        } else {
+            arr[k] = R[j];
+            ++j;
+        }
+        ++k;
+    }
+    while (i < n1) {
+        arr[k] = L[i];
+        ++i;
+        ++k;
+    }
+    while (j < n2) {
+        arr[k] = R[j];
+        ++j;
+        ++k;
+    }
+}
