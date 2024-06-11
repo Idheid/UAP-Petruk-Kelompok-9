@@ -443,3 +443,127 @@ void transfer(const string& username) {
     } while (cont != 'n');
 }
 
+// Menampilkan Semua Pengguna
+void display_all_users() {
+    system("CLS");
+    cout << "\n\n\t\t\t\t----------------------------------------------";
+    cout << "\n\t\t\t\t\t    Daftar Semua Pengguna";
+    cout << "\n\t\t\t\t----------------------------------------------\n";
+    for (const auto& pair : registered_users) {
+        cout << "\n\t\t\t\tNama Pengguna: " << pair.first;
+    }
+}
+
+// Mencari Pengguna Berdasarkan Nama
+void search_user_by_name(const string& partial_name) {
+    system("CLS");
+    cout << "\n\n\t\t\t\t----------------------------------------------";
+    cout << "\n\t\t\t\t\t   Hasil Pencarian Pengguna";
+    cout << "\n\t\t\t\t----------------------------------------------\n";
+    for (const auto& pair : registered_users) {
+        if (pair.first.find(partial_name) != string::npos) {
+            cout << "\n\t\t\t\tNama Pengguna: " << pair.first;
+        }
+    }
+}
+
+// Menampilkan Detail Pengguna
+void show_user_details(const char* username) {
+    system("CLS");
+    if (registered_users.find(username) != registered_users.end()) {
+        const User& user = registered_users[username];
+        cout << "\n\n\t\t\t\t----------------------------------------------";
+        cout << "\n\t\t\t\t\t  Detail Pengguna: " << username;
+        cout << "\n\t\t\t\t----------------------------------------------\n";
+        cout << "\n\t\t\t\tNama Pengguna: " << user.getUsername();
+        cout << "\n\t\t\t\tSaldo: " << user.getBalance();
+        cout << "\n\t\t\t\tJumlah Transaksi: " << user.getTransactionHistory().size();
+        cout << "\n\t\t\t\tRiwayat Login: " << user.getRecentLogins().size() << " kali";
+    } else {
+        cout << RED << "\n\t\t\t\tPengguna tidak ditemukan!" << RESET;
+    }
+}
+
+// Menyimpan Data ke Queue untuk Backup
+void backup_user_data() {
+    system("CLS");
+    queue<User> backupQueue;
+    for (const auto& pair : registered_users) {
+        backupQueue.push(pair.second);
+    }
+    cout << GREEN << "\n\t\t\t\tData Pengguna berhasil di-backup ke dalam Queue!" << RESET;
+}
+
+/ Membaca Data dari Queue untuk Restore
+void restore_user_data() {
+    system("CLS");
+    queue<User> backupQueue;
+    // Anggap backupQueue sudah diisi dengan data sebelumnya
+    while (!backupQueue.empty()) {
+        User user = backupQueue.front();
+        backupQueue.pop();
+        registered_users[user.getUsername()] = user;
+    }
+    cout << GREEN << "\n\t\t\t\tData Pengguna berhasil di-restore dari Queue!" << RESET;
+}
+
+// Fungsi Merge Sort untuk Array
+void merge_array(string arr[], int l, int m, int r) {
+    int n1 = m - l + 1;
+    int n2 = r - m;
+    string* L = new string[n1];
+    string* R = new string[n2];
+    for (int i = 0; i < n1; ++i)
+        L[i] = arr[l + i];
+    for (int j = 0; j < n2; ++j)
+        R[j] = arr[m + 1 + j];
+
+    int i = 0, j = 0, k = l;
+    while (i < n1 && j < n2) {
+        if (L[i] <= R[j]) {
+            arr[k] = L[i];
+            ++i;
+        } else {
+            arr[k] = R[j];
+            ++j;
+        }
+        ++k;
+    }
+    while (i < n1) {
+        arr[k] = L[i];
+        ++i;
+        ++k;
+    }
+    while (j < n2) {
+        arr[k] = R[j];
+        ++j;
+        ++k;
+    }
+    delete[] L;
+    delete[] R;
+}
+
+void mergeSort_array(string arr[], int l, int r) {
+    if (l < r) {
+        int m = l + (r - l) / 2;
+        mergeSort_array(arr, l, m);
+        mergeSort_array(arr, m + 1, r);
+        merge_array(arr, l, m, r);
+    }
+}
+
+// Fungsi untuk mengurutkan nama pengguna
+void sort_usernames() {
+    system("CLS");
+    int size = registered_users.size();
+    string* usernames = new string[size];
+    int i = 0;
+    for (const auto& pair : registered_users) {
+        usernames[i++] = pair.first;
+    }
+    mergeSort_array(usernames, 0, size - 1);
+    for (int i = 0; i < size; ++i) {
+        cout << "\n\t\t\t\t" << usernames[i];
+    }
+    delete[] usernames;
+}
