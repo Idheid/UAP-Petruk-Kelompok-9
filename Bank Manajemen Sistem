@@ -138,3 +138,43 @@ int main() {
     } while (ch != '5');
     return 0;
 }
+
+//Adrianne Julian Claresta
+// Menyimpan Data Tabungan Pengguna di File
+void load_data() {
+    ifstream infile("user_data.txt");
+    if (infile.is_open()) {
+        char uname[50], pwd[50];
+        string transaction;
+        int balance, num_transactions;
+        while (infile >> uname >> pwd >> balance >> num_transactions) {
+            User user(uname, pwd);
+            user.deposit(balance); // Simulating balance addition
+            infile.ignore();
+            for (int i = 0; i < num_transactions; ++i) {
+                getline(infile, transaction);
+                size_t pos = transaction.find(": ");
+                string type = transaction.substr(0, pos);
+                int amount = stoi(transaction.substr(pos + 2));
+                user.addTransaction(type, amount);
+            }
+            registered_users[uname] = user;
+        }
+        infile.close();
+    }
+}
+
+// Menyimpan Data Pendaftaran di file
+void save_data() {
+    ofstream outfile("user_data.txt");
+    if (outfile.is_open()) {
+        for (const auto& pair : registered_users) {
+            const User& user = pair.second;
+            outfile << user.getUsername() << " " << user.getPassword() << " " << user.getBalance() << " " << user.getTransactionHistory().size() << endl;
+            for (const string& transaction : user.getTransactionHistory()) {
+                outfile << transaction << endl;
+            }
+        }
+        outfile.close();
+    }
+}
