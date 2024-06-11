@@ -58,3 +58,24 @@ public:
     const vector<string>& getTransactionHistory() const { return transaction_history; }
     const list<string>& getRecentLogins() const { return recent_logins; }
 };
+
+// Global variable untuk pendaftaran pengguna
+map<string, User> registered_users;
+
+// Prototipe
+void load_data();
+void save_data();
+void user_registration();
+bool user_login(string& username);
+void display_menu(const string& username);
+void deposit(const string& username);
+void withdraw(const string& username);
+void view_balance(const string& username);
+void view_transaction_history(const string& username);
+void view_recent_logins(const string& username);
+void transfer(const string& username);
+void merge(vector<string>& arr, int l, int m, int r);
+void mergeSort(vector<string>& arr, int l, int r);
+void display_all_users();
+void search_user_by_name(const string& partial_name);
+void show_user_details(const char* username);
