@@ -389,3 +389,57 @@ void view_recent_logins(const string& username) {
     }
 }
 
+// Transfer ke Pengguna Lain
+void transfer(const string& username) {
+    char cont;
+    do {
+        system("CLS");
+        char to_user[50];
+        int amount;
+        char pwd[50]; // Buffer untuk kata sandi
+        cout << "\n\t\t\t\tMasukkan Nama Pengguna Tujuan: ";
+        cin >> to_user;
+        cout << "\n\t\t\t\tMasukkan Jumlah Transfer: ";
+        cin >> amount;
+
+        // Memverifikasi kata sandi sebelum melakukan transfer
+        cout << "\n\t\t\t\tMasukkan Password untuk Konfirmasi: ";
+        cin >> pwd;
+
+        // Jika kata sandi sesuai, lanjutkan dengan transfer
+        if (strcmp(registered_users[username].getPassword(), pwd) == 0) {
+            if (registered_users.find(to_user) != registered_users.end() && amount <= registered_users[username].getBalance()) {
+                registered_users[username].transfer(amount, to_user);
+                registered_users[to_user].deposit(amount);
+                cout << GREEN << "\n\t\t\t\tTransfer Berhasil!" << RESET;
+                cout << "\n\n\t\t\t\t-------------------------------\n";
+                cout << "\t\t\t\t        Struk Transaksi";
+                cout << "\n\t\t\t\t-------------------------------\n";
+                time_t now = time(0);
+                struct tm* local_time = localtime(&now);
+                char dt[100];
+                strftime(dt, sizeof(dt), "%d-%m-%Y %H:%M:%S", local_time);
+                cout << "\n\t\t\t\t" << dt;
+                cout << "\n\t\t\t\tDari   : " << username;
+                cout << "\n\t\t\t\tKepada : " << to_user;
+                cout << "\n\t\t\t\tJumlah : " << amount;
+
+                // Konfirmasi untuk transaksi lagi
+                cout << "\n\n\t\t\t\tApakah Anda ingin melakukan transaksi lagi? (y/n): ";
+                cin >> cont;
+                if (cont == 'n') {
+                    cont = 'n';
+                }
+            } else {
+                cout << RED << "\n\t\t\t\tNama Pengguna Tujuan Tidak Valid atau Saldo Tidak Cukup!" << RESET;
+                cout << "\n\t\t\t\tCoba Lagi? (y/n): ";
+                cin >> cont;
+            }
+        } else {
+            cout << RED << "\n\t\t\t\tPassword Salah!" << RESET;
+            cout <<"\n\t\t\t\tCoba Lagi? (y/n): ";
+            cin >> cont;
+        }
+    } while (cont != 'n');
+}
+
