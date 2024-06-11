@@ -353,3 +353,39 @@ void merge(vector<string>& arr, int l, int m, int r) {
         ++k;
     }
 }
+
+//Citra Fardiani
+void mergeSort(vector<string>& arr, int l, int r) {
+    if (l < r) {
+        int m = l + (r - l) / 2;
+        mergeSort(arr, l, m);
+        mergeSort(arr, m + 1, r);
+        merge(arr, l, m, r);
+    }
+}
+
+// Melihat Riwayat Transaksi
+void view_transaction_history(const string& username) {
+    system("CLS");
+    vector<string> transactions = registered_users[username].getTransactionHistory();
+    mergeSort(transactions, 0, transactions.size() - 1);  // Menggunakan mergeSort untuk mengurutkan transaksi
+    cout << "\n\n\t\t\t\t----------------------------------------------";
+    cout << "\n\t\t\t\t\t    Riwayat Transaksi Anda";
+    cout << "\n\t\t\t\t----------------------------------------------\n";
+    for (const string& transaction : transactions) {
+        cout << "\n\t\t\t\t" << transaction;
+    }
+}
+
+// Menampilkan Riwayat Login Terbaru
+void view_recent_logins(const string& username) {
+    system("CLS");
+    const list<string>& logins = registered_users[username].getRecentLogins();
+    cout << "\n\n\t\t\t\t----------------------------------------------";
+    cout << "\n\t\t\t\t\t  Riwayat Login Terbaru Anda";
+    cout << "\n\t\t\t\t----------------------------------------------\n";
+    for (const string& login : logins) {
+        cout << "\n\t\t\t\t" << login;
+    }
+}
+
