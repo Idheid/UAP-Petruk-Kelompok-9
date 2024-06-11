@@ -79,3 +79,62 @@ void mergeSort(vector<string>& arr, int l, int r);
 void display_all_users();
 void search_user_by_name(const string& partial_name);
 void show_user_details(const char* username);
+
+int main() {
+    load_data();
+    char ch;
+    string username;
+
+    do {
+        system("CLS");
+        cout << "\n\n\t\t\t\t-------------------------------\n";
+        cout << "\t\t\t\t     BANK MANAJEMEN SISTEM";
+        cout << "\n\t\t\t\t-------------------------------\n";
+        cout << "\t\t\t\t        ::MENU UTAMA::\n";
+        cout << "\n\t\t\t\t1. REGISTRASI NASABAH BARU";
+        cout << "\n\t\t\t\t2. LOGIN NASABAH";
+        cout << "\n\t\t\t\t3. LIHAT DAFTAR SEMUA NASABAH";
+        cout << "\n\t\t\t\t4. CARI NASABAH BERDASARKAN NAMA";
+        cout << "\n\t\t\t\t5. KELUAR";
+        cout << "\n\n\t\t\t\t-------------------------------";
+        cout << "\n\t\t\t\tPilih Opsi (1-5): ";
+        cin >> ch;
+
+        switch (ch) {
+            case '1':
+                user_registration();
+                break;
+            case '2':
+                if (user_login(username)) {
+                    display_menu(username);
+                } else {
+                    cout << RED << "\n\n\t\t\t\tLogin Tidak Valid!" << RESET;
+                    cin.ignore();
+                    cin.get();
+                }
+                break;
+            case '3':
+                display_all_users();
+                break;
+            case '4':
+                {
+                    string partial_name;
+                    cout << "\n\n\t\t\t\tMasukkan Sebagian Nama untuk Pencarian: ";
+                    cin.ignore();
+                    getline(cin, partial_name);
+                    search_user_by_name(partial_name);
+                }
+                break;
+            case '5':
+                save_data();
+                system("CLS");
+                cout << GREEN << "\n\n\t\t\t\tBerhasil Keluar." << RESET;
+                break;
+            default:
+                cout << "\a";
+        }
+        cin.ignore();
+        cin.get();
+    } while (ch != '5');
+    return 0;
+}
