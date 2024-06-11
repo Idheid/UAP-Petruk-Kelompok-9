@@ -494,7 +494,7 @@ void backup_user_data() {
     cout << GREEN << "\n\t\t\t\tData Pengguna berhasil di-backup ke dalam Queue!" << RESET;
 }
 
-/ Membaca Data dari Queue untuk Restore
+// Membaca Data dari Queue untuk Restore
 void restore_user_data() {
     system("CLS");
     queue<User> backupQueue;
